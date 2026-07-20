@@ -1,6 +1,6 @@
 import pytest
 from pydantic import ValidationError
-from 종합실습.종합실습 import WeatherSchema
+from 종합실습 import WeatherSchema
 
 
 # 정상 데이터 테스트
