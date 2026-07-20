@@ -132,9 +132,6 @@ ip_result = validate_schema(
 )
 
 
-save_data = []
-
-
 if weather_result and country_result and ip_result:
 
     df = pd.DataFrame([{
