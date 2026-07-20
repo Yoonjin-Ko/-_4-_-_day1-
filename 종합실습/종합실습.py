@@ -35,7 +35,7 @@ async def main():
     urls = [
         "https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&hourly=temperature_2m,precipitation_probability&forecast_days=3&timezone=Asia/Seoul",
         "https://countries.dev/alpha/KOR",
-        "http://ip-api.com/json/8.8.8.8"
+        "http://ip-api.com/json/211.234.0.0"
     ]
 
     async with httpx.AsyncClient() as client:
@@ -43,6 +43,7 @@ async def main():
             fetch(client, urls[0]),
             fetch(client, urls[1]),
             fetch(client, urls[2])
+            return_exceptions=True
         )
 
     for i, result in enumerate(results, start=1):
@@ -149,8 +150,8 @@ if weather_result and country_result and ip_result:
     }])
 
 else:
-
     print("검증 실패 데이터 저장하지 않음")
+    exit()
 
 
 # 4) 저장
@@ -164,11 +165,7 @@ os.makedirs(
 start = time.perf_counter()
 
 
-df.to_csv(
-    "data/result.csv",
-    index=False,
-    encoding="utf-8"
-)
+df.to_csv("data/result.csv", index=False, encoding="utf-8-sig")
 
 csv_write_time = time.perf_counter() - start
 
