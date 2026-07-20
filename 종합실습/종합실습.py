@@ -42,7 +42,7 @@ async def main():
         results = await asyncio.gather(
             fetch(client, urls[0]),
             fetch(client, urls[1]),
-            fetch(client, urls[2])
+            fetch(client, urls[2]),
             return_exceptions=True
         )
 
