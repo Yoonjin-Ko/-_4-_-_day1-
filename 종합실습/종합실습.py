@@ -1,6 +1,17 @@
+"""
+================================================================================
+[종합 실습] 실무형 수집, 검증, 품질 파이프라인
+================================================================================
+#작성자: 고윤진
+#작성목적 : 데이터 수집 미니 파이프라인
+#작성일: 2026-07-20
+#변경내역:
+#    v1.0 (2026-07-20) 최초 작성
+================================================================================
+"""
+
 # 1)환경 준비
 # venv 생성 후 requirements.txt 설치
-
 
 # 2)비동기 API 데이터 수집
 import asyncio
@@ -27,7 +38,6 @@ async def main():
     ]
 
     async with httpx.AsyncClient() as client:
-
         results = await asyncio.gather(
             fetch(client, urls[0]),
             fetch(client, urls[1]),
@@ -40,28 +50,17 @@ async def main():
 
     print("3개 API 모두 정상 수집 완료")
 
-
     return results
 
 # API 실행
 results = asyncio.run(main())
 
-
-# API 결과 분리
-
 weather_json = results[0]
-
 country_json = results[1]
-
 ip_json = results[2]
 
 
-
 # 3)스키마 검증
-
-
-
-
 class WeatherSchema(BaseModel):
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
@@ -79,7 +78,6 @@ class IPSchema(BaseModel):
     timezone: str
 
 
-
 def validate_schema(schema, data):
     try:
         result = schema(**data)
@@ -93,9 +91,6 @@ def validate_schema(schema, data):
         return None
 
 
-
-
-
 weather_data = {
     "latitude": weather_json["latitude"],
     "longitude": weather_json["longitude"],
@@ -106,13 +101,11 @@ weather_data = {
 }
 
 
-
 country_data = {
     "name": country_json["name"],
     "capital": country_json["capital"],
     "population": country_json["population"]
 }
-
 
 
 ip_data = {
@@ -123,7 +116,6 @@ ip_data = {
 
 
 # 검증 실행
-
 weather_result = validate_schema(
     WeatherSchema,
     weather_data
@@ -138,7 +130,6 @@ ip_result = validate_schema(
     IPSchema,
     ip_data
 )
-
 
 
 save_data = []
@@ -172,7 +163,6 @@ os.makedirs(
 )
 
 # CSV 저장 시간 측정
-
 start = time.perf_counter()
 
 
@@ -185,7 +175,6 @@ df.to_csv(
 csv_write_time = time.perf_counter() - start
 
 # Parquet 저장 시간 측정
-
 start = time.perf_counter()
 
 
